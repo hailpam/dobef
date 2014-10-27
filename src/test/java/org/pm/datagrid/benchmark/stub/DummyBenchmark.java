@@ -50,5 +50,11 @@ public class DummyBenchmark  extends Benchmark
     protected void specificWriteResults() throws BenchmarkException 
     {
     }
+
+    @Override
+    protected void specificTearDown() throws BenchmarkException 
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

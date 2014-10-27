@@ -37,6 +37,7 @@ public class HazelcastWriterNode
             bench.warmUp();
             bench.benchmark();
             bench.writeResults();
+            bench.tearDown();
         } catch (IOException ex) {
             logError(ex);
         } catch (IllegalStateException ex) {

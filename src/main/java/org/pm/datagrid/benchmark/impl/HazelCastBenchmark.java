@@ -21,6 +21,7 @@ public class HazelCastBenchmark extends Benchmark
 
     private String mapName;
     private Random rand;
+    private HazelcastInstance dataGrid;
     
     
     public HazelCastBenchmark(Probe probe, Configuration conf) 
@@ -41,8 +42,9 @@ public class HazelCastBenchmark extends Benchmark
     {
         // initializing Hazelcast
         Config conf = new Config(RandomStringUtils.random(4));
-        HazelcastInstance dataGrid = Hazelcast.newHazelcastInstance(conf);
-        ConcurrentMap<Integer, String> mapGrid = dataGrid.getMap(this.mapName);
+        this.dataGrid = Hazelcast.newHazelcastInstance(conf);
+        ConcurrentMap<Integer, String> mapGrid = this.dataGrid.getMap(this.mapName);
+        
         
         for(int s = 0; s < this.config.getNrWarmUps(); s++) {
             int idx = s*this.config.getNrWorkers();
@@ -117,6 +119,12 @@ public class HazelCastBenchmark extends Benchmark
     @Override
     protected void specificWriteResults() throws BenchmarkException 
     {
+    }
+
+    @Override
+    protected void specificTearDown() throws BenchmarkException 
+    {
+        this.dataGrid.shutdown();
     }
     
 }

@@ -214,6 +214,9 @@ public abstract class Benchmark extends Observable
         }
     }
     
+    
+    public final void tearDown() throws BenchmarkException {}
+    
     protected abstract void specificConfigure(Configuration conf);
     
     protected abstract void specificInit() throws BenchmarkException ;
@@ -225,6 +228,8 @@ public abstract class Benchmark extends Observable
                                                 throws BenchmarkException ;
 
     protected abstract void specificWriteResults() throws BenchmarkException ;
+    
+    protected abstract void specificTearDown() throws BenchmarkException;
     
     
     private String printBenchmarkSummary(String dataSize) 
