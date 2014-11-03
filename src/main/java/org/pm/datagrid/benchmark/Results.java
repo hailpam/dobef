@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.pm.datagrid.benchmark;
 
 /**
- *
- * @author pmaresca
+ * Results. 
+ * 
+ * @author Paolo Maresca <plo.maresca@gmail.com>
  */
 public class Results 
 {
@@ -17,16 +14,34 @@ public class Results
     private final String side;
     private final String dataSize;
 
+    
+    /**
+     * 
+     * @param side
+     * @param dataSize 
+     */
     public Results(String side, String dataSize) 
     {
         this.side = side;
         this.dataSize = dataSize;
     }
-
+    
+    /**
+     * 
+     * @return 
+     */
     public double[] getTimeRecords() { return timeRecords; }
 
+    /**
+     * 
+     * @param timeRecords 
+     */
     public void setTimeRecords(double[] timeRecords) { this.timeRecords = timeRecords; }
     
+    /**
+     * 
+     * @return 
+     */
     public String resultsToString() 
     {
         if(this.timeRecords == null || timeRecords.length == 0)

@@ -9,12 +9,20 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
+ * Configuration Reader.
  * 
- * 
- * @author pmaresca
+ * @author Paolo Maresca <plo.maresca@gmail.com>
  */
 public class ConfigurationReader 
 {
+    /**
+     * 
+     * @param is
+     * @return
+     * @throws IOException
+     * @throws IllegalStateException
+     * @throws BenchmarkException 
+     */
     public static Map<String, Configuration> readConfiguration(InputStream is) 
                                                 throws IOException,
                                                        IllegalStateException,

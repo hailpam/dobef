@@ -14,8 +14,10 @@ import java.util.Observable;
 import org.apache.commons.io.FileUtils;
 
 /**
- *
- * @author pmaresca
+ * Benchmark data type. It defines an abstract class able to implement the generic
+ * phases of any generic benchmark.
+ * 
+ * @author Paolo Maresca <plo.maresca@gmail.com>
  */
 public abstract class Benchmark extends Observable
 {   
@@ -50,7 +52,13 @@ public abstract class Benchmark extends Observable
     protected Thread[] workers;
     protected Thread[] warmUpworkers;
     
-    public Benchmark(Probe probe, Configuration conf) 
+    
+    /**
+     * 
+     * @param probe
+     * @param conf 
+     */
+    protected Benchmark(Probe probe, Configuration conf) 
     {
         this.configured = false;
         this.initialized = false;
@@ -65,8 +73,6 @@ public abstract class Benchmark extends Observable
     
     /**
      * 
-     * 
-     * @param conf 
      */
     public final void configure() 
     {
@@ -82,7 +88,7 @@ public abstract class Benchmark extends Observable
     
     /**
      * 
-     * @throws org.pm.datagrid.benchmark.BenchmarkException
+     * @throws BenchmarkException 
      */
     @SuppressWarnings("UseOfObsoleteCollectionType")
     public final void init() throws BenchmarkException 
@@ -114,7 +120,7 @@ public abstract class Benchmark extends Observable
     
     /**
      * 
-     * @throws org.pm.datagrid.benchmark.BenchmarkException
+     * @throws BenchmarkException 
      */
     public final void warmUp() throws BenchmarkException 
     {
@@ -136,7 +142,7 @@ public abstract class Benchmark extends Observable
     
     /**
      * 
-     * @throws org.pm.datagrid.benchmark.BenchmarkException
+     * @throws BenchmarkException 
      */
     public final void benchmark() throws BenchmarkException 
     {
@@ -185,7 +191,7 @@ public abstract class Benchmark extends Observable
     
     /**
      * 
-     * @throws org.pm.datagrid.benchmark.BenchmarkException
+     * @throws BenchmarkException 
      */
     public final void writeResults() throws BenchmarkException 
     {
@@ -214,24 +220,57 @@ public abstract class Benchmark extends Observable
         }
     }
     
-    
+    /**
+     * 
+     * @throws BenchmarkException 
+     */
     public final void tearDown() throws BenchmarkException {}
     
+    /**
+     * 
+     * @param conf 
+     */
     protected abstract void specificConfigure(Configuration conf);
     
+    /**
+     * 
+     * @throws BenchmarkException 
+     */
     protected abstract void specificInit() throws BenchmarkException ;
-
+    
+    /**
+     * 
+     * @param displacement
+     * @throws BenchmarkException 
+     */
     protected abstract void specificWarmUp(int displacement) 
                                                 throws BenchmarkException ;
-
+    
+    /**
+     * 
+     * @param displacement
+     * @throws BenchmarkException 
+     */
     protected abstract void specificBenchmark(int displacement) 
                                                 throws BenchmarkException ;
 
+    /**
+     * 
+     * @throws BenchmarkException 
+     */
     protected abstract void specificWriteResults() throws BenchmarkException ;
     
+    /**
+     * 
+     * @throws BenchmarkException 
+     */
     protected abstract void specificTearDown() throws BenchmarkException;
     
-    
+    /**
+     * 
+     * @param dataSize
+     * @return 
+     */
     private String printBenchmarkSummary(String dataSize) 
     {
         return SUMMARY_TEMPLATE

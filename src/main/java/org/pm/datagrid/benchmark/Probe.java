@@ -5,8 +5,9 @@ package org.pm.datagrid.benchmark;
 import org.apache.commons.math3.stat.StatUtils;
 
 /**
- *
- * @author pmaresca
+ * Probe.
+ * 
+ * @author Paolo Maresca <plo.maresca@gmail.com>
  */
 public class Probe
 {
@@ -21,6 +22,11 @@ public class Probe
     private double variance;
     
     
+    /**
+     * 
+     * @param samples
+     * @param rescale 
+     */
     public Probe(int samples, int rescale) 
     {
         this.nrSamples = samples;
@@ -32,12 +38,11 @@ public class Probe
         this.mean = 0.0;
         this.variance = 0.0;
     }
-
-    Probe() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
-    
+    /**
+     * 
+     * @param record 
+     */
     public void update(Double record) 
     {
         if(this.nextSample > this.nrSamples - 1)
@@ -52,6 +57,9 @@ public class Probe
         }
     }
     
+    /**
+     * 
+     */
     public synchronized void reset() 
     {
         if(this.nextSample != this.nrSamples)
@@ -64,6 +72,10 @@ public class Probe
         this.nextSample = 0;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public synchronized double mean() 
     {
         if(this.mean == 0.0 && (this.nextSample == this.nextSample - 1))
@@ -72,6 +84,10 @@ public class Probe
             return this.max;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public synchronized double variance() 
     {
         if(this.variance == 0.0 && (this.nextSample == this.nextSample))
@@ -80,14 +96,31 @@ public class Probe
             return this.variance;
     }
     
+    /**
+     * 
+     * @param p
+     * @return 
+     */
     public synchronized double percentile(double p) 
     { return StatUtils.percentile(this.timeRecords, p) ; 
     }
     
+    /**
+     * 
+     * @return 
+     */
     public synchronized double min() { return this.min; }
     
+    /**
+     * 
+     * @return 
+     */
     public synchronized double  max() { return this.max; }
     
+    /**
+     * 
+     * @return 
+     */
     public double[] getTimeRecords() { return this.timeRecords; }
     
 }

@@ -4,8 +4,9 @@ package org.pm.datagrid.benchmark;
 import com.google.common.base.Preconditions;
 
 /**
+ * Configuration Builder.
  *
- * @author pmaresca
+ * @author Paolo Maresca <plo.maresca@gmail.com>
  */
 public class ConfigurationBuilder 
 {
@@ -27,6 +28,9 @@ public class ConfigurationBuilder
     private String side;
 
     
+    /**
+     * 
+     */
     public ConfigurationBuilder() 
     {
         this.nrTests = -1;
@@ -40,6 +44,11 @@ public class ConfigurationBuilder
         this.nrWarmUps = 3;
     }
     
+    /**
+     * 
+     * @param nrTests
+     * @return 
+     */
     public ConfigurationBuilder nrTests(int nrTests) 
     {
         Preconditions.checkArgument(nrTests > 0);
@@ -47,6 +56,11 @@ public class ConfigurationBuilder
         return this;
     }
     
+    /**
+     * 
+     * @param nrRepetitions
+     * @return 
+     */
     public ConfigurationBuilder nrRepetitions(int nrRepetitions) 
     {
         Preconditions.checkArgument(nrRepetitions > 0);
@@ -54,6 +68,11 @@ public class ConfigurationBuilder
         return this;
     }
     
+    /**
+     * 
+     * @param nrWorkers
+     * @return 
+     */
     public ConfigurationBuilder nrWorkers(int nrWorkers) 
     {
         Preconditions.checkArgument(nrWorkers > 0);
@@ -61,6 +80,11 @@ public class ConfigurationBuilder
         return this;
     }
     
+    /**
+     * 
+     * @param nrWarmUps
+     * @return 
+     */
     public ConfigurationBuilder nrWarmUps(int nrWarmUps) 
     {
         Preconditions.checkArgument(nrWarmUps >= 0);
@@ -68,6 +92,11 @@ public class ConfigurationBuilder
         return this;
     }
     
+    /**
+     * 
+     * @param dataSizes
+     * @return 
+     */
     public ConfigurationBuilder dataSizes(int[] dataSizes) 
     {
         Preconditions.checkArgument(dataSizes.length > 0);
@@ -75,6 +104,11 @@ public class ConfigurationBuilder
         return this;
     }
     
+    /**
+     * 
+     * @param nrWrites
+     * @return 
+     */
     public ConfigurationBuilder nrWrites(int nrWrites) 
     {
         Preconditions.checkArgument(nrWrites > 0);
@@ -82,6 +116,11 @@ public class ConfigurationBuilder
         return this;
     }
     
+    /**
+     * 
+     * @param nrReads
+     * @return 
+     */
     public ConfigurationBuilder nrReads(int nrReads) 
     {
         Preconditions.checkArgument(nrReads > 0);
@@ -89,6 +128,11 @@ public class ConfigurationBuilder
         return this;
     }
     
+    /**
+     * 
+     * @param fileName
+     * @return 
+     */
     public ConfigurationBuilder fileName(String fileName) 
     {
         Preconditions.checkArgument(fileName != null && !fileName.equals(""));
@@ -96,6 +140,11 @@ public class ConfigurationBuilder
         return this;
     }
     
+    /**
+     * 
+     * @param filePath
+     * @return 
+     */
     public ConfigurationBuilder filePath(String filePath) 
     {
         Preconditions.checkArgument(filePath != null && !filePath.equals(""));
@@ -103,6 +152,11 @@ public class ConfigurationBuilder
         return this;
     }
     
+    /**
+     * 
+     * @param side
+     * @return 
+     */
     public ConfigurationBuilder side(String side) 
     {
         Preconditions.checkArgument(side != null && !side.equals(""));
@@ -110,6 +164,11 @@ public class ConfigurationBuilder
         return this;
     }
     
+    /**
+     * 
+     * @return
+     * @throws BenchmarkException 
+     */
     public Configuration build() throws BenchmarkException
     {
         if(this.nrTests == -1)
