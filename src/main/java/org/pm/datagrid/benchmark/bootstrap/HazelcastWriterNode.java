@@ -19,15 +19,13 @@ import org.pm.datagrid.benchmark.impl.HazelCastBenchmark;
  */
 public class HazelcastWriterNode 
 {
-    private static final String FILE_PROPERTIES = "/home/pmaresca/Developments/"
-            + "workspaces/datagrid-benchmark/src/main/resources/benchmark.properties";
-    
-    
-    public static void main(String[] args) 
-    {
+    private static final String FILE_PROPERTIES = "benchmark.properties";
+
+
+    public static void main(String[] args) {
         Benchmark bench = null;
         try {
-            InputStream is = new FileInputStream(FILE_PROPERTIES);
+            InputStream is = HazelcastWriterNode.class.getClassLoader().getResourceAsStream(FILE_PROPERTIES);
             Map<String, Configuration> confs = ConfigurationReader.readConfiguration(is);
             Configuration conf = confs.get("writer");
             Probe probe = new Probe(conf.getNrTests(), 1000);
