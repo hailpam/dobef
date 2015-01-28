@@ -20,7 +20,7 @@ import org.pm.datagrid.benchmark.impl.HazelCastBenchmark;
 public class HazelcastWriterNode 
 {
     private static final String FILE_PROPERTIES = "/home/pmaresca/Developments/"
-            + "workspaces/datagrid-benchmark/src/main/resources/benchmark.properties";
+            + "workspaces/dobef/src/main/resources/benchmark.properties";
     
     
     public static void main(String[] args) 
