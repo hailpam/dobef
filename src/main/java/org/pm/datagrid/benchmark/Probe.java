@@ -78,9 +78,10 @@ public class Probe
      */
     public synchronized double mean() 
     {
-        if(this.mean == 0.0 && (this.nextSample == this.nextSample - 1))
-            return StatUtils.mean(this.timeRecords);
-        else 
+        if(this.mean == 0.0 && (this.nextSample == this.nrSamples)) {
+            this.mean = StatUtils.mean(this.timeRecords);
+            return this.mean;
+        }else 
             return this.max;
     }
     
@@ -90,10 +91,20 @@ public class Probe
      */
     public synchronized double variance() 
     {
-        if(this.variance == 0.0 && (this.nextSample == this.nextSample))
-            return StatUtils.variance(this.timeRecords);
-        else 
-            return this.variance;
+        if(this.variance == 0.0 && (this.nextSample == this.nrSamples))
+            this.variance = StatUtils.variance(this.timeRecords);
+         return this.variance;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public synchronized double stdDeviation() 
+    {
+        if(this.variance == 0.0 && (this.nextSample == this.nrSamples))
+            this.variance = StatUtils.variance(this.timeRecords);
+        return Math.sqrt(this.variance);
     }
     
     /**
@@ -102,7 +113,8 @@ public class Probe
      * @return 
      */
     public synchronized double percentile(double p) 
-    { return StatUtils.percentile(this.timeRecords, p) ; 
+    { 
+        return StatUtils.percentile(this.timeRecords, p) ; 
     }
     
     /**

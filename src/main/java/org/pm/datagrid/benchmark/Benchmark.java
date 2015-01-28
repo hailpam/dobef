@@ -21,15 +21,18 @@ import org.apache.commons.io.FileUtils;
  */
 public abstract class Benchmark extends Observable
 {   
-    private static final String SUMMARY_TEMPLATE = "\nBenchmark Summary- Data [${DATA}]" 
+    private static final String SUMMARY_TEMPLATE = "\nBenchmark Summary- Data [${DATA}], "+
+                                                        "Test(s) [${TESTS}], "+
+                                                        "Repetition(s) [${REPETITIONS}]" 
                                                  +"\n{\n"
                                                  + "  elapsed[ms]        : ${ELAPSED}\n"
                                                  + "  mean[us]           : ${MEAN}\n"
                                                  + "  variance[us]       : ${VARIANCE}\n"
+                                                 + "  std deviation[us]  : ${STDDEV}\n"
                                                  + "  min[us]            : ${MIN}\n"
                                                  + "  max[us]            : ${MAX}\n"
                                                  + "  95th percentile[us]: ${PERCENTILE}\n"
-                                                 + "\n}\n";
+                                                 + "}\n";
     
     private static final String DATE_FORMAT = "yyyy_MM_dd_HH_mm_ss_";
     
@@ -154,18 +157,20 @@ public abstract class Benchmark extends Observable
             this.benchmarked = true;
             
             long benchStart = System.currentTimeMillis();
-            
+            int displacement = 0;
             for(int d = 0; d < this.config.getDataSizes().length; d++) {
                 for(int i = 0; i < this.config.getNrTests(); i++) {
                     long testStart = System.nanoTime();
                     for(int j = 0; j < this.config.getNrRepetitions(); j++) {
-                        int displacement = d*(this.config.getNrTests()*
-                                                this.config.getNrRepetitions()*
-                                                this.config.getNrWorkers())
-                                           +i*(this.config.getNrTests()*
-                                                this.config.getNrRepetitions()) 
-                                           +j*this.config.getNrWorkers();
+//                        TODO : fix index based approach
+//                        int displacement = d*(this.config.getNrTests()*
+//                                                this.config.getNrRepetitions()*
+//                                                this.config.getNrWorkers())
+//                                           +i*(this.config.getNrTests()*
+//                                                this.config.getNrRepetitions()) 
+//                                           +j*this.config.getNrWorkers();
                         this.specificBenchmark(displacement);
+                        displacement += this.config.getNrWorkers();
                     }
                     // notify probe with measure
                     Long testEnd = System.nanoTime() - testStart;
@@ -280,7 +285,10 @@ public abstract class Benchmark extends Observable
                 .replace("${VARIANCE}", Double.toString(this.probe.variance()))
                 .replace("${MAX}", Double.toString(this.probe.max()))
                 .replace("${MIN}", Double.toString(this.probe.min()))
-                .replace("${PERCENTILE}", Double.toString(this.probe.percentile(0.95)));
+                .replace("${PERCENTILE}", Double.toString(this.probe.percentile(95.0)))
+                .replace("${STDDEV}", Double.toString(this.probe.stdDeviation()))
+                .replace("${TESTS}", Integer.toString(this.config.getNrTests()))
+                .replace("${REPETITIONS}", Integer.toString(this.config.getNrRepetitions()));
     }
     
 }
