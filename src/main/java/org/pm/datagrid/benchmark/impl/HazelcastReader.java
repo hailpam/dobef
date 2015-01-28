@@ -3,7 +3,6 @@ package org.pm.datagrid.benchmark.impl;
 
 import java.util.Random;
 import java.util.concurrent.ConcurrentMap;
-import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  *
