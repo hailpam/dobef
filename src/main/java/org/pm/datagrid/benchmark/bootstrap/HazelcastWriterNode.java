@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import org.pm.datagrid.benchmark.Benchmark;
-
 import org.pm.datagrid.benchmark.BenchmarkException;
 import org.pm.datagrid.benchmark.Configuration;
 import org.pm.datagrid.benchmark.ConfigurationReader;
@@ -17,13 +16,13 @@ import org.pm.datagrid.benchmark.impl.HazelCastBenchmark;
  *
  * @author pmaresca
  */
-public class HazelcastWriterNode 
+public class HazelcastWriterNode
 {
     private static final String FILE_PROPERTIES = "/home/pmaresca/Developments/"
-            + "workspaces/dobef/src/main/resources/benchmark.properties";
-    
-    
-    public static void main(String[] args) 
+            + "workspaces/java/dobef/src/main/resources/benchmark.properties";
+
+
+    public static void main(String[] args)
     {
         Benchmark bench = null;
         try {
@@ -45,17 +44,17 @@ public class HazelcastWriterNode
         } catch (BenchmarkException ex) {
             logError(ex);
         }
-        
+
         System.exit(0);
     }
-    
-    
-    private static void logError(Exception e) 
+
+
+    private static void logError(Exception e)
     {
         e.printStackTrace();
         System.err.println("Error: ["+e.getMessage()+"]");
-        
+
         System.exit(1);
     }
-    
+
 }

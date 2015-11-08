@@ -22,15 +22,15 @@ public class HazelCastBenchmark extends Benchmark
     private String mapName;
     private Random rand;
     private HazelcastInstance dataGrid;
-    
-    
-    public HazelCastBenchmark(Probe probe, Configuration conf) 
+
+
+    public HazelCastBenchmark(Probe probe, Configuration conf)
     {
         super(probe, conf);
-        
+
         this.rand = new Random();
     }
-    
+
     @Override
     protected void specificConfigure(Configuration conf)
     {
@@ -38,26 +38,26 @@ public class HazelCastBenchmark extends Benchmark
     }
 
     @Override
-    protected void specificInit() throws BenchmarkException 
+    protected void specificInit() throws BenchmarkException
     {
         // initializing Hazelcast
         Config conf = new Config(RandomStringUtils.random(4));
         this.dataGrid = Hazelcast.newHazelcastInstance(conf);
         ConcurrentMap<Integer, String> mapGrid = this.dataGrid.getMap(this.mapName);
-        
-        
+
+
         for(int s = 0; s < this.config.getNrWarmUps(); s++) {
             int idx = s*this.config.getNrWorkers();
             int i = 0;
             while(i < this.config.getNrWorkers()) {
                 this.warmUpworkers[(i + idx)] = new Thread(new HazelcastWriter(
-                                                        this.config.getNrWrites(), 
-                                                        this.rand.nextInt(4096), 
+                                                        this.config.getNrWrites(),
+                                                        this.rand.nextInt(4096),
                                                         this.mapName, mapGrid));
                 i++;
             }
         }
-        
+
         for(int s = 0; s < this.config.getDataSizes().length; s++) {
             int idx = s*this.config.getNrTests()*
                                 this.config.getNrRepetitions()*
@@ -66,17 +66,17 @@ public class HazelCastBenchmark extends Benchmark
             while(i < this.config.getNrTests()*
                         this.config.getNrRepetitions()*this.config.getNrWorkers()) {
                 this.workers[(i + idx)] = new Thread(new HazelcastWriter(
-                                                        this.config.getNrWrites(), 
-                                                        this.config.getDataSizes()[s], 
+                                                        this.config.getNrWrites(),
+                                                        this.config.getDataSizes()[s],
                                                         this.mapName, mapGrid));
                 i++;
             }
         }
-        
+
     }
 
     @Override
-    protected void specificWarmUp(int displacement) throws BenchmarkException 
+    protected void specificWarmUp(int displacement) throws BenchmarkException
     {
         try {
             int i = 0;
@@ -84,20 +84,20 @@ public class HazelCastBenchmark extends Benchmark
                 this.warmUpworkers[(i + displacement)].start();
                 i++;
             }
-            
+
             i = 0;
             while(i < this.config.getNrWorkers()) {
                 this.warmUpworkers[(i + displacement)].join();
                 i++;
             }
-        }catch(InterruptedException ie) { 
+        }catch(InterruptedException ie) {
             System.err.println("  Error ["+ie.getMessage()+"]");
         }
     }
 
     @Override
-    protected void specificBenchmark(int displacement) 
-                        throws BenchmarkException 
+    protected void specificBenchmark(int displacement)
+                        throws BenchmarkException
     {
         try {
             int i = 0;
@@ -105,26 +105,26 @@ public class HazelCastBenchmark extends Benchmark
                 this.workers[(i + displacement)].start();
                 i++;
             }
-            
+
             i = 0;
             while(i < this.config.getNrWorkers()) {
                 this.workers[(i + displacement)].join();
                 i++;
             }
-        }catch(InterruptedException ie) { 
+        }catch(InterruptedException ie) {
             System.err.println("  Error ["+ie.getMessage()+"]");
         }
     }
 
     @Override
-    protected void specificWriteResults() throws BenchmarkException 
+    protected void specificWriteResults() throws BenchmarkException
     {
     }
 
     @Override
-    protected void specificTearDown() throws BenchmarkException 
+    protected void specificTearDown() throws BenchmarkException
     {
         this.dataGrid.shutdown();
     }
-    
+
 }
