@@ -52,8 +52,8 @@ public abstract class Benchmark extends Observable
     
     private final SimpleDateFormat formatter;
     
-    protected Thread[] workers;
-    protected Thread[] warmUpworkers;
+    protected Runnable[] workers;
+    protected Runnable[] warmUpworkers;
     
     
     /**
@@ -103,11 +103,11 @@ public abstract class Benchmark extends Observable
             System.out.println(":init");
             this.initialized = true;
             
-            this.workers = new Thread[this.config.getNrWorkers()*
+            this.workers = new Runnable[this.config.getNrWorkers()*
                                             this.config.getDataSizes().length*
                                             this.config.getNrTests()*
                                             this.config.getNrRepetitions()];
-            this.warmUpworkers = new Thread[this.config.getNrWorkers()*
+            this.warmUpworkers = new Runnable[this.config.getNrWorkers()*
                                             this.config.getNrWarmUps()];
             this.results = new Hashtable<>(this.config.getDataSizes().length);
             for(int i = 0; i < this.config.getDataSizes().length; i++) {
@@ -280,15 +280,12 @@ public abstract class Benchmark extends Observable
     {
         return SUMMARY_TEMPLATE
                 .replace("${DATA}", dataSize)
-                .replace("${ELAPSED}", Double.toString(this.elapsed))
-                .replace("${MEAN}", Double.toString(this.probe.mean()))
-                .replace("${VARIANCE}", Double.toString(this.probe.variance()))
-                .replace("${MAX}", Double.toString(this.probe.max()))
-                .replace("${MIN}", Double.toString(this.probe.min()))
-                .replace("${PERCENTILE}", Double.toString(this.probe.percentile(95.0)))
-                .replace("${STDDEV}", Double.toString(this.probe.stdDeviation()))
-                .replace("${TESTS}", Integer.toString(this.config.getNrTests()))
-                .replace("${REPETITIONS}", Integer.toString(this.config.getNrRepetitions()));
+                .replace("${ELAPSED}", String.format("%d", (long) this.elapsed))
+                .replace("${MEAN}", String.format("%.1f", this.probe.mean()))
+                .replace("${VARIANCE}", String.format("%d", (long) this.probe.variance()))
+                .replace("${MAX}", String.format("%.1f", this.probe.max()))
+                .replace("${MIN}", String.format("%.1f", this.probe.min()))
+                .replace("${PERCENTILE}", String.format("%.1f", this.probe.percentile(0.95)));
     }
     
 }

@@ -4,8 +4,15 @@ package org.pm.datagrid.benchmark.impl;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.pm.datagrid.benchmark.Benchmark;
 import org.pm.datagrid.benchmark.BenchmarkException;
@@ -76,43 +83,39 @@ public class HazelCastBenchmark extends Benchmark
     }
 
     @Override
-    protected void specificWarmUp(int displacement) throws BenchmarkException
-    {
+    protected void specificWarmUp(int displacement) throws BenchmarkException {
+
         try {
-            int i = 0;
-            while(i < this.config.getNrWorkers()) {
-                this.warmUpworkers[(i + displacement)].start();
-                i++;
+            ExecutorService es = Executors.newCachedThreadPool();
+            List<Future<?>> futures = new ArrayList<>();
+            for(int i = 0; i < this.config.getNrWorkers(); i++) {
+                futures.add(es.submit(this.warmUpworkers[(i + displacement) % this.warmUpworkers.length]));
             }
 
-            i = 0;
-            while(i < this.config.getNrWorkers()) {
-                this.warmUpworkers[(i + displacement)].join();
-                i++;
+            for (Future<?> future : futures) {
+                future.get();
             }
-        }catch(InterruptedException ie) {
-            System.err.println("  Error ["+ie.getMessage()+"]");
+            es.shutdown();
+        } catch (Exception ie) {
+            System.err.println("  Error [" + ie.getMessage() + "]");
         }
     }
 
     @Override
-    protected void specificBenchmark(int displacement)
-                        throws BenchmarkException
-    {
+    protected void specificBenchmark(int displacement) throws BenchmarkException {
         try {
-            int i = 0;
-            while(i < this.config.getNrWorkers()) {
-                this.workers[(i + displacement)].start();
-                i++;
+            ExecutorService es = Executors.newCachedThreadPool();
+            List<Future<?>> futures = new ArrayList<>();
+            for(int i = 0; i < this.config.getNrWorkers(); i++) {
+                futures.add(es.submit(this.workers[(i + displacement)% this.workers.length]));
             }
 
-            i = 0;
-            while(i < this.config.getNrWorkers()) {
-                this.workers[(i + displacement)].join();
-                i++;
+            for (Future<?> future : futures) {
+                future.get();
             }
-        }catch(InterruptedException ie) {
-            System.err.println("  Error ["+ie.getMessage()+"]");
+            es.shutdown();
+        } catch (Exception ie) {
+            System.err.println("  Error [" + ie.getMessage() + "]");
         }
     }
 

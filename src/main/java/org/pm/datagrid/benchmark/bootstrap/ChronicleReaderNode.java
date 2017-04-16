@@ -1,33 +1,27 @@
-
 package org.pm.datagrid.benchmark.bootstrap;
 
-import java.io.FileInputStream;
+import org.pm.datagrid.benchmark.*;
+import org.pm.datagrid.benchmark.impl.ChronicleBenchmark;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import org.pm.datagrid.benchmark.Benchmark;
-import org.pm.datagrid.benchmark.BenchmarkException;
-import org.pm.datagrid.benchmark.Configuration;
-import org.pm.datagrid.benchmark.ConfigurationReader;
-import org.pm.datagrid.benchmark.Probe;
-import org.pm.datagrid.benchmark.impl.HazelCastBenchmark;
 
 /**
- *
  * @author pmaresca
  */
-public class HazelcastWriterNode
-{
+public class ChronicleReaderNode {
     private static final String FILE_PROPERTIES = "benchmark.properties";
+
 
     public static void main(String[] args) {
         Benchmark bench = null;
         try {
-            InputStream is = HazelcastWriterNode.class.getClassLoader().getResourceAsStream(FILE_PROPERTIES);
+            InputStream is = ChronicleReaderNode.class.getClassLoader().getResourceAsStream(FILE_PROPERTIES);
             Map<String, Configuration> confs = ConfigurationReader.readConfiguration(is);
-            Configuration conf = confs.get("writer");
+            Configuration conf = confs.get("reader");
             Probe probe = new Probe(conf.getNrTests(), 1000);
-            bench = new HazelCastBenchmark(probe, conf);
+            bench = new ChronicleBenchmark(probe, conf);
             bench.configure();
             bench.init();
             bench.warmUp();
@@ -46,10 +40,9 @@ public class HazelcastWriterNode
     }
 
 
-    private static void logError(Exception e)
-    {
+    private static void logError(Exception e) {
         e.printStackTrace();
-        System.err.println("Error: ["+e.getMessage()+"]");
+        System.err.println("Error: [" + e.getMessage() + "]");
 
         System.exit(1);
     }

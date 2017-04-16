@@ -18,15 +18,13 @@ import org.pm.datagrid.benchmark.impl.HazelCastBenchmark;
  */
 public class HazelcastReaderNode
 {
-    private static final String FILE_PROPERTIES = "/home/pmaresca/Developments/"
-            + "workspaces/java/dobef/src/main/resources/benchmark.properties";
+    private static final String FILE_PROPERTIES = "benchmark.properties";
 
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Benchmark bench = null;
         try {
-            InputStream is = new FileInputStream(FILE_PROPERTIES);
+            InputStream is = HazelcastReaderNode.class.getClassLoader().getResourceAsStream(FILE_PROPERTIES);
             Map<String, Configuration> confs = ConfigurationReader.readConfiguration(is);
             Configuration conf = confs.get("reader");
             Probe probe = new Probe(conf.getNrTests(), 1000);
